@@ -1,7 +1,8 @@
 # graphemebreak
 
-Splits text into Unicode extended grapheme clusters (UAX #29), including the
-Indic_Conjunct_Break rule added in Unicode 15.1.
+Splits text into Unicode extended grapheme clusters (UAX #29 revision 49,
+Unicode 18.0.0), including the current form of the Indic_Conjunct_Break rule
+(GB9c).
 
 ```go
 for cluster := range graphemebreak.Graphemes("Namaste नमस्ते \U0001F64F") {
@@ -34,12 +35,26 @@ graphemebreak (this package):            853/853 (100.00%)
 Every failure in the two established libraries is a GB9c case, e.g. the pair
 U+0915 U+094D U+0915 (Devanagari "क्क") splits into two clusters instead of
 one. `graphemebreak` was built by re-implementing UAX #29 directly rather
-than adapting either library, specifically to get this rule right: the rule
-text requires a literal leading `\p{InCB=Consonant}` before the conjunct
-sequence, but the official test data expects a match even when no consonant
-precedes the linker (e.g. a plain letter, or the start of the string,
-directly followed by a virama and a consonant). See `break.go` for the
-automaton this actually resolves to.
+than adapting either library, against the **current** GB9c rule: UAX #29
+revision 49 (reissued for Unicode 18.0.0) changed GB9c to
+
+```
+\p{InCB=Linker} \p{InCB=Extend}* × \p{InCB=Consonant}
+```
+
+— no leading consonant required. The rule published for Unicode 15.1
+through 17.0 (UAX #29 revisions up to 47) read
+
+```
+\p{InCB=Consonant} [\p{InCB=Extend}\p{InCB=Linker}]* \p{InCB=Linker} [\p{InCB=Extend}\p{InCB=Linker}]* × \p{InCB=Consonant}
+```
+
+instead, which does require a leading consonant. `rivo/uniseg` and
+`clipperhouse/uax29` implement that older form, which is why they fail cases
+where no consonant precedes the linker (e.g. a plain letter, or the start of
+the string, directly followed by a virama and a consonant) — the official
+test data is built against the current rule. See `break.go` for the
+automaton and the exact citations.
 
 Correctness costs some speed against `clipperhouse/uax29`, which precomputes
 a lookup trie rather than binary-searching range tables; it's a fair trade

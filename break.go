@@ -9,22 +9,26 @@ package graphemebreak
 // re-scanning backward, so the whole algorithm is O(n) in the length of the
 // input with O(1) additional state.
 
-// incb automaton for GB9c:
+// incb automaton for GB9c, as defined by UAX #29 revision 49 (Unicode
+// 18.0.0, the version this package targets):
 //
-//	\p{InCB=Consonant} [\p{InCB=Extend}\p{InCB=Linker}]* \p{InCB=Linker} [\p{InCB=Extend}\p{InCB=Linker}]* × \p{InCB=Consonant}
+//	\p{InCB=Linker} \p{InCB=Extend}* × \p{InCB=Consonant}
 //
-// The rule text requires a leading Consonant, but the reference
-// implementation behind the official test data (and, empirically, every UAX
-// #29 conformant engine) treats the leading \p{InCB=Consonant} as
-// unconstrained context rather than as a required literal: a Linker sets the
-// "ready" state unconditionally, an Extend run carries it forward
-// unchanged, and any other character (including a Consonant, which starts a
-// fresh potential run) clears it. GraphemeBreakTest.txt cases such as
-// "a" + VIRAMA + <consonant> (no Consonant precedes the Linker at all) only
-// pass with this reading; requiring a literal leading Consonant fails them.
+// Revision 49 changed GB9c to this form ("Change Rule GB9c in UAX #29 to
+// \p{InCB=Linker} \p{InCB=Extend}* × \p{InCB=Consonant}", per the revision's
+// own changelog, https://www.unicode.org/reports/tr29/#Modifications). The
+// rule published for Unicode 15.1 through 17.0 (UAX #29 revisions up to 47)
+// read \p{InCB=Consonant} [\p{InCB=Extend}\p{InCB=Linker}]* \p{InCB=Linker}
+// [\p{InCB=Extend}\p{InCB=Linker}]* × \p{InCB=Consonant} instead — a leading
+// Consonant was required. rivo/uniseg and clipperhouse/uax29 implement that
+// older form, which is why they fail GraphemeBreakTest.txt cases such as
+// "a" + VIRAMA + <consonant>, where no consonant precedes the Linker: a
+// Linker arms the "ready" state unconditionally, an Extend run carries it
+// forward, and any other character (including a Consonant, which may itself
+// start a fresh run) clears it.
 const (
-	incbNotReady uint8 = iota // no Linker active in the current Extend/Linker run
-	incbReady                 // a Linker has been seen in the current run: a following Consonant does not break
+	incbNotReady uint8 = iota // no Linker active in the current Extend run
+	incbReady                 // a Linker has been seen, only Extend since: a following Consonant does not break
 )
 
 // extPict automaton states for GB11:
@@ -147,9 +151,9 @@ func (s *state) noBreak(curGCB, curInCB uint8, curIsPict bool) bool {
 	if prev == gcbPrepend {
 		return true
 	}
-	// GB9c: [Extend Linker]* Linker [Extend Linker]* × \p{InCB=Consonant}
-	// (see the incbReady doc comment for why the leading Consonant in the
-	// rule text is not treated as a hard requirement here)
+	// GB9c (UAX #29 revision 49): Linker Extend* × \p{InCB=Consonant}
+	// (see the incbReady doc comment for the older, pre-revision-49 form
+	// that rivo/uniseg and clipperhouse/uax29 implement instead)
 	if s.incb == incbReady && curInCB == incbConsonant {
 		return true
 	}
