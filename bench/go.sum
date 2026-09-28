@@ -1,0 +1,6 @@
+github.com/clipperhouse/uax29 v1.16.0 h1:cgGq6YEvTYV65k+NfIUsCEctM38cYiZ3B0M2NJbGE7Q=
+github.com/clipperhouse/uax29 v1.16.0/go.mod h1:jzP68wNYrMZrd2AGuHPTuCqnlwpxxjqkK2HXkD2PhlI=
+github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
+github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
+golang.org/x/text v0.16.0 h1:a94ExnEXNtEwYLGJSIUxnWoxoRz/ZcCsV63ROupILh4=
+golang.org/x/text v0.16.0/go.mod h1:GhwF1Be+LQoKShO3cGOHzqOgRrGaYc9AvblQOmPVHnI=
