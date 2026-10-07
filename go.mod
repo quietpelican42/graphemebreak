@@ -1,3 +1,3 @@
-module github.com/__GH_OWNER__/graphemebreak
+module github.com/quietpelican42/graphemebreak
 
 go 1.26.0

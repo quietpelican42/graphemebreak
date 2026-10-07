@@ -20,7 +20,7 @@ import (
 	"testing"
 	"time"
 
-	gb "github.com/__GH_OWNER__/graphemebreak"
+	gb "github.com/quietpelican42/graphemebreak"
 )
 
 const (

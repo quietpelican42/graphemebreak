@@ -73,7 +73,7 @@ All three allocate 0 B/op on these inputs.
 ## Installation
 
 ```sh
-go get github.com/__GH_OWNER__/graphemebreak
+go get github.com/quietpelican42/graphemebreak
 ```
 
 ## Usage

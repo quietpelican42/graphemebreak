@@ -6,7 +6,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	gb "github.com/__GH_OWNER__/graphemebreak"
+	gb "github.com/quietpelican42/graphemebreak"
 )
 
 func collect(s string) []string {

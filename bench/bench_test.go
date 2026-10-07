@@ -11,7 +11,7 @@ import (
 	uax29 "github.com/clipperhouse/uax29/graphemes"
 	uniseg "github.com/rivo/uniseg"
 
-	gb "github.com/__GH_OWNER__/graphemebreak"
+	gb "github.com/quietpelican42/graphemebreak"
 )
 
 var (

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	gb "github.com/__GH_OWNER__/graphemebreak"
+	gb "github.com/quietpelican42/graphemebreak"
 )
 
 // FuzzGraphemes checks the two invariants that must hold for any input,
